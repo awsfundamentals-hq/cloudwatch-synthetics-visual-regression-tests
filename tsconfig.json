@@ -1,4 +1,4 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "exclude": ["canary/**/*"]
+  "exclude": ["canary/**/*", ".astro", ".sst", "dist"]
 }

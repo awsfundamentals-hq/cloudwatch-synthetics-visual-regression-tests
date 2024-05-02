@@ -1,7 +1,10 @@
-import { defineConfig } from "astro/config";
-import aws from "astro-sst";
+import { defineConfig } from 'astro/config';
+import aws from 'astro-sst';
 
 export default defineConfig({
-  output: "server",
+  output: 'server',
   adapter: aws(),
+  vite: {
+    logLevel: 'error',
+  },
 });

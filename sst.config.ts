@@ -2,6 +2,7 @@
 import * as pulumi from '@pulumi/pulumi';
 import path from 'path';
 import type { AppInput } from './.sst/platform/src/config';
+import SparkMD5 from 'spark-md5';
 
 export default $config({
   app(_input: AppInput) {
@@ -13,48 +14,50 @@ export default $config({
   },
   async run() {
     const site = new sst.aws.Astro('Web');
-
-    const canaryBucket = new aws.s3.Bucket('CanaryBucket');
-    const canaryRole = new aws.iam.Role('CanaryRole', {
-      assumeRolePolicy: JSON.stringify({
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Action: 'sts:AssumeRole',
-            Principal: {
-              Service: 'synthetics.amazonaws.com',
-            },
-            Effect: 'Allow',
-            Sid: '',
-          },
-          {
-            Action: 'sts:AssumeRole',
-            Principal: {
-              Service: 'lambda.amazonaws.com',
-            },
-            Effect: 'Allow',
-            Sid: '',
-          },
-        ],
-      }),
-    });
-    new aws.iam.RolePolicyAttachment('S3PolicyAttachment', {
-      role: canaryRole,
-      policyArn: 'arn:aws:iam::aws:policy/AmazonS3FullAccess',
-    });
-    new aws.iam.RolePolicyAttachment('CWPolicyAttachment', {
-      role: canaryRole,
-      policyArn: 'arn:aws:iam::aws:policy/CloudWatchFullAccess',
-    });
-
     site.url.apply((url) => {
+      const canaryBucket = new aws.s3.Bucket('CanaryBucket');
+      const canaryRole = new aws.iam.Role('CanaryRole', {
+        assumeRolePolicy: JSON.stringify({
+          Version: '2012-10-17',
+          Statement: [
+            {
+              Action: 'sts:AssumeRole',
+              Principal: {
+                Service: 'synthetics.amazonaws.com',
+              },
+              Effect: 'Allow',
+              Sid: '',
+            },
+            {
+              Action: 'sts:AssumeRole',
+              Principal: {
+                Service: 'lambda.amazonaws.com',
+              },
+              Effect: 'Allow',
+              Sid: '',
+            },
+          ],
+        }),
+      });
+      new aws.iam.RolePolicyAttachment('S3PolicyAttachment', {
+        role: canaryRole,
+        policyArn: 'arn:aws:iam::aws:policy/AmazonS3FullAccess',
+      });
+      new aws.iam.RolePolicyAttachment('CWPolicyAttachment', {
+        role: canaryRole,
+        policyArn: 'arn:aws:iam::aws:policy/CloudWatchFullAccess',
+      });
+
+      const file = new pulumi.asset.FileAsset(path.join(process.cwd(), 'canary', 'index.js'));
+
       const canaryCodeArchive = new pulumi.asset.AssetArchive({
-        'nodejs/node_modules/index.js': new pulumi.asset.FileAsset(path.join(process.cwd(), 'canary', 'index.js')),
+        'nodejs/node_modules/index.js': file,
       });
       const canaryCodeS3Object = new aws.s3.BucketObject('CanaryCode', {
         bucket: canaryBucket.bucket,
         key: 'canary.zip',
         source: canaryCodeArchive,
+        etag: pulumi.output(file.path).apply((file) => SparkMD5.hash(file)),
       });
 
       new aws.synthetics.Canary('ScreenshotCanary', {
