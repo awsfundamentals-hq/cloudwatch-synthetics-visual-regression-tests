@@ -1,23 +1,30 @@
 const synthetics = require('Synthetics');
 const log = require('SyntheticsLogger');
-const syntheticsConfiguration = synthetics.getConfiguration();
+const config = synthetics.getConfiguration();
 
-syntheticsConfiguration.setConfig({
-  continueOnStepFailure: false, // Set to true if you want the script to continue even after a step fails.
-  includeRequestHeaders: true, // Enable if headers should be displayed in HAR
-  includeResponseHeaders: true, // Enable if headers should be displayed in HAR
-  restrictedHeaders: ['Authorization'], // Value of these headers will be redacted from logs and reports
-  restrictedUrlParameters: [], // Values of these url parameters will be redacted from logs and reports
-  withVisualCompareWithBaseRun: true, // Enable to compare with base run
-  withVisualVarianceThresholdPercentage: 0, // Percentage threshold for visual diff comparison
+const title = 'visual-regression-check';
+
+config.setConfig({
+  continueOnStepFailure: true,
+  includeRequestHeaders: true,
+  includeResponseHeaders: true,
+  restrictedHeaders: [],
+  restrictedUrlParameters: [],
 });
 
+config.disableStepScreenshots();
+config.withVisualCompareWithBaseRun(true);
+config.withVisualVarianceThresholdPercentage(10);
+
 const takeScreenshot = async () => {
-  let page = await synthetics.getPage();
-  await page.goto(process.env.SITE_URL, { waitUntil: 'networkidle0' });
-  await page.screenshot({ path: '/tmp/screenshot.png' });
-  let pageTitle = await page.title();
-  log.info('Page title: ' + pageTitle);
+  await synthetics.executeStep(title, async () => {
+    let page = await synthetics.getPage();
+    await page.goto(process.env.SITE_URL, { waitUntil: 'networkidle0' });
+    await new Promise((r) => setTimeout(r, 2500));
+    let pageTitle = await page.title();
+    log.info('Page title: ' + pageTitle);
+    await synthetics.takeScreenshot(title, 'loaded');
+  });
 };
 
 exports.handler = async () => {
