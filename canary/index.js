@@ -8,8 +8,8 @@ syntheticsConfiguration.setConfig({
   includeResponseHeaders: true, // Enable if headers should be displayed in HAR
   restrictedHeaders: ['Authorization'], // Value of these headers will be redacted from logs and reports
   restrictedUrlParameters: [], // Values of these url parameters will be redacted from logs and reports
-  withVisualCompareWithBaseRun: true,
-  withVisualVarianceThresholdPercentage: 0,
+  withVisualCompareWithBaseRun: true, // Enable to compare with base run
+  withVisualVarianceThresholdPercentage: 0, // Percentage threshold for visual diff comparison
 });
 
 const takeScreenshot = async () => {

@@ -1,8 +1,8 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 import * as pulumi from '@pulumi/pulumi';
-import path from 'path';
+import { join } from 'path';
+import { cwd } from 'process';
 import type { AppInput } from './.sst/platform/src/config';
-import SparkMD5 from 'spark-md5';
 
 export default $config({
   app(_input: AppInput) {
@@ -15,7 +15,11 @@ export default $config({
   async run() {
     const site = new sst.aws.Astro('Web');
     site.url.apply((url) => {
-      const canaryBucket = new aws.s3.Bucket('CanaryBucket');
+      const canaryBucket = new aws.s3.Bucket('CanaryBucket', {
+        versioning: {
+          enabled: true,
+        },
+      });
       const canaryRole = new aws.iam.Role('CanaryRole', {
         assumeRolePolicy: JSON.stringify({
           Version: '2012-10-17',
@@ -48,7 +52,7 @@ export default $config({
         policyArn: 'arn:aws:iam::aws:policy/CloudWatchFullAccess',
       });
 
-      const file = new pulumi.asset.FileAsset(path.join(process.cwd(), 'canary', 'index.js'));
+      const file = new pulumi.asset.FileAsset(join(cwd(), 'canary', 'index.js'));
 
       const canaryCodeArchive = new pulumi.asset.AssetArchive({
         'nodejs/node_modules/index.js': file,
@@ -57,7 +61,6 @@ export default $config({
         bucket: canaryBucket.bucket,
         key: 'canary.zip',
         source: canaryCodeArchive,
-        etag: pulumi.output(file.path).apply((file) => SparkMD5.hash(file)),
       });
 
       new aws.synthetics.Canary('ScreenshotCanary', {
