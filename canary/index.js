@@ -4,14 +4,6 @@ const config = synthetics.getConfiguration();
 
 const title = 'visual-regression-check';
 
-config.setConfig({
-  continueOnStepFailure: true,
-  includeRequestHeaders: true,
-  includeResponseHeaders: true,
-  restrictedHeaders: [],
-  restrictedUrlParameters: [],
-});
-
 config.disableStepScreenshots();
 config.withVisualCompareWithBaseRun(true);
 config.withVisualVarianceThresholdPercentage(10);
