@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
+import { Image } from 'astro:assets';
+import image01 from '../assets/images/00-synthetics.png';
+import image02 from '../assets/images/01-botched-migration.png';
+import image03 from '../assets/images/02-synthetics.png';
 ---
 <Layout title="How CloudWatch Synthetics Work">
 	<main>
@@ -15,22 +18,16 @@ import Card from '../components/Card.astro';
 			<p>But we don't want real users to be the first to notice an issue. We want to map our user's journey and make sure that every part of our application is working as expected. And this is exactly what canaries are for.</p>
 			<p>Canaries are scripts that check your websites and APIs. Instead of running checks manually within your application, you can automate them via scripts. This scripts can be scheduled to run at regular intervals.</p>
 			<p>This means you can monitor your applications 24/7, even when you're not around or when there's no traffic at all. Not for a single use-case, but for every use-case you can think of.</p>
-			<figure>
-				<img src="../../public/00-synthetics.png" alt="" style="display: block; margin: auto;">
-			</figure>
+			<img src={image01.src} alt="" style="display: block; margin: auto;">
 			<p>Canaries can mimic user behavior, allowing you to consistently test. They will ensure the user experience is functioning correctly. Even during times when your application isn't handling much or any real user traffic. This proactive approach helps you identify problems right from the beginning. Often, even before they impact real users.</p>
 			<p>Canaries are not only capable of assessing the uptime, but also the response time of your services. They can record how long pages take to load, or API request to complete. They can even capture images of how your application appears using a headless Chromium browser. This can be used to detect significant changes to a webpage.</p>
 			<p>These canaries are versatile, monitoring the health of your REST APIs, web URLs, and site content. Also, they can be used to check for unauthorized alterations that could indicate security threats like code injection, or cross-site scripting.</p>
 			<p>They will help you that ever newly deployed version won't break previous features by running tests on your application.</p>
 			<p>Consider a migration scenario where something goes wrong in the new environment.</p>
-			<figure>
-				<img src="../../public/01-botched-migration.png" alt="" style="display: block; margin: auto;">
-			</figure>
+			<img src={image02.src} alt="" style="display: block; margin: auto;">
 			<p>If we're routing traffic gradually via Route53, only a fraction of users will encounter errors. This will send us a diluted signal of the underlying problem. We might not even detect this, due to having alarm thresholds that are too high.</p>
 			<p>In such cases, relying solely on RUM might not even give us the full picture.</p>
-			<figure>
-				<img src="../../public/02-synthetics.png" alt="" style="display: block; margin: auto;">
-			</figure>
+			<img src={image03.src} alt="" style="display: block; margin: auto;">
 			<p>This is where Synthetic monitoring can make the difference. By setting up synthetic tests to run continuously from various locations, we can simulate interactions with our application from all around the world. This will provide a constant stream of data on its performance and availability.</p>
 		</article>
 	</main>

@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "astro": "astro",
-    "build": "astro check \u0026\u0026 astro build",
+    "build": "astro check && astro build",
     "dev": "sst dev astro dev",
     "preview": "astro preview",
     "start": "astro dev"
@@ -15,5 +15,8 @@
     "astro-sst": "2.41.5",
     "sst": "ion",
     "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "@pulumi/pulumi": "^3.114.0"
   }
 }
