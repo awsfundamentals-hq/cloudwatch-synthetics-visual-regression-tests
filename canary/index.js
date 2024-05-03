@@ -6,7 +6,7 @@ const title = 'visual-regression-check';
 
 config.disableStepScreenshots();
 config.withVisualCompareWithBaseRun(true);
-config.withVisualVarianceThresholdPercentage(10);
+config.withVisualVarianceThresholdPercentage(0);
 
 const takeScreenshot = async () => {
   await synthetics.executeStep(title, async () => {
