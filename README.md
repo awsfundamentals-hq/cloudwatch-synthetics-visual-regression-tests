@@ -1,54 +1,62 @@
-# Astro Starter Kit: Basics
+# CloudWatch Synthetic Canaries with SST Ion
 
-```sh
-npm create astro@latest -- --template basics
+This repository provides a hands-on guide to deploying a web application using SST Ion and monitoring it using AWS CloudWatch Synthetic Canaries. The project aims to demonstrate how to use AWS services for effective monitoring and visual regression testing.
+
+![Architecture Diagram](docs/architecture.png)
+
+## Prerequisites
+
+Before you begin, ensure you have the following:
+- An AWS account
+- Node.js installed
+
+## Installation
+
+Follow these steps to get your application up and running:
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/awsfundamentals-hq/cloudwatch-synthetics-visual-regression-tests
+   cd cloudwatch-synthetics-visual-regression-tests
+   ```
+
+2. **Install SST Ion**
+   SST Ion can be installed using a script or via a package manager. Choose the method that best fits your setup:
+
+   - **Using the Install Script**
+     ```bash
+     curl -fsSL https://ion.sst.dev/install | bash
+     ```
+
+   - **Using Homebrew**
+     ```bash
+     brew install sst/tap/sst
+     brew upgrade sst
+     ```
+
+3. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+4. **Deploy the Application**
+   ```bash
+   sst deploy
+   ```
+
+You can also execute the following command to run the development mode:
+```bash
+npm run dev
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## Usage
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Once deployed, the application will be monitored using AWS CloudWatch Synthetic Canaries. You can view the monitoring results in your AWS console under CloudWatch > Synthetic Canaries.
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+## Contributing
 
-## 🚀 Project Structure
+We welcome contributions! Please feel free to fork the repository and submit pull requests. You can also open issues to discuss potential changes or report bugs.
 
-Inside of your Astro project, you'll see the following folders and files:
+## License
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+This project is open source and available under the [MIT License](LICENSE).
